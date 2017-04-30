@@ -393,7 +393,7 @@ def train(total_loss, global_step):
 
 def maybe_download_and_extract():
     """Download and extract the tarball from Alex's website."""
-    dest_directory = FLAGS.data_dir
+    dest_directory = '../cifar10'
     if not os.path.exists(dest_directory):
         os.makedirs(dest_directory)
     filename = DATA_URL.split('/')[-1]
