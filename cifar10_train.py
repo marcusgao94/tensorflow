@@ -54,7 +54,7 @@ tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
 tf.app.flags.DEFINE_integer('log_frequency', 100,
                             """How often to log results to the console.""")
-tf.app.flags.DEFINE_integer('check_frequency', 1000,
+tf.app.flags.DEFINE_integer('check_frequency', 100,
                             """How often to save checkpoints to the console.""")
 
 

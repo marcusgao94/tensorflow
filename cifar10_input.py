@@ -35,7 +35,7 @@ NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN = 12000
 NUM_EXAMPLES_PER_EPOCH_FOR_EVAL = 3000
 
 
-def read_cifar10(filename_queue, test):
+def read_cifar10(filename_queue, test = False):
     """Reads and parses examples from CIFAR10 data files.
   
     Recommendation: if you want N-way read parallelism, call this function
@@ -228,7 +228,7 @@ def inputs(eval_data, data_dir, batch_size):
                      for i in xrange(1, 6)]
         num_examples_per_epoch = NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN
     else:
-        filenames = [os.path.join(data_dir, 'test_data.bin')]
+        filenames = [os.path.join(data_dir, 'validation.bin')]
         num_examples_per_epoch = NUM_EXAMPLES_PER_EPOCH_FOR_EVAL
 
     for f in filenames:
@@ -239,7 +239,7 @@ def inputs(eval_data, data_dir, batch_size):
     filename_queue = tf.train.string_input_producer(filenames)
 
     # Read examples from files in the filename queue.
-    read_input = read_cifar10(filename_queue, eval_data)
+    read_input = read_cifar10(filename_queue)
     reshaped_image = tf.cast(read_input.uint8image, tf.float32)
 
     height = IMAGE_SIZE
