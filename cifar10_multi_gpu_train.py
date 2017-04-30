@@ -54,7 +54,7 @@ FLAGS = tf.app.flags.FLAGS
 tf.app.flags.DEFINE_string('train_dir', '../train',
                            """Directory where to write event logs """
                            """and checkpoint.""")
-tf.app.flags.DEFINE_integer('max_steps', 100000,
+tf.app.flags.DEFINE_integer('max_steps', 500000,
                             """Number of batches to run.""")
 tf.app.flags.DEFINE_integer('num_gpus', 1,
                             """How many GPUs to use.""")
@@ -236,10 +236,11 @@ def train():
 
         summary_writer = tf.summary.FileWriter(FLAGS.train_dir, sess.graph)
 
+        start_time = time.time()
         for step in xrange(FLAGS.max_steps):
-            start_time = time.time()
+            last_time = time.time()
             _, loss_value = sess.run([train_op, loss])
-            duration = time.time() - start_time
+            duration = time.time() - last_time
 
             assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
 
@@ -249,9 +250,9 @@ def train():
                 sec_per_batch = duration / FLAGS.num_gpus
 
                 format_str = (
-                '%s: step %d, loss = %.2f (%.1f examples/sec; %.3f '
-                'sec/batch)')
-                print(format_str % (datetime.now(), step, loss_value,
+                        'totaltime: %.3fs, step %d, loss = %.2f (%.1f examples/sec; %.3f '
+                        'sec/batch)')
+                print(format_str % (time.time() - start_time, step, loss_value,
                                     examples_per_sec, sec_per_batch))
 
             if step % 100 == 0:
@@ -265,10 +266,6 @@ def train():
 
 
 def main(argv=None):  # pylint: disable=unused-argument
-    cifar10.maybe_download_and_extract()
-    if tf.gfile.Exists(FLAGS.train_dir):
-        tf.gfile.DeleteRecursively(FLAGS.train_dir)
-    tf.gfile.MakeDirs(FLAGS.train_dir)
     train()
 
 
